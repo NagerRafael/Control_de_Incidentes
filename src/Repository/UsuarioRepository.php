@@ -35,11 +35,21 @@ class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgra
 
     public function remove(Usuario $entity, bool $flush = false): void
     {
-        $this->getEntityManager()->remove($entity);
+        #$this->getEntityManager()->remove($entity);
+        #$entity->setEstado('N');
 
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function finAll(): array{
+        return $this->createQueryBuilder('u')
+            ->  Where('u.estado != :estado')
+            ->  setParameter('estado', 'N')
+            ->  orderBy('u.idUsuario')
+            ->  getQuery()
+            ->  getResult();
     }
 
     /**
